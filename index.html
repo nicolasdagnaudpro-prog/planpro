@@ -848,15 +848,13 @@ function startApp() {
   updateSidebarInfo();
   initCurrentDate();
   renderAll();
+  saveToStorage();
 }
 
 function resetApp() {
-  if (!confirm('Retourner à l\'écran d\'accueil ? Les données non sauvegardées seront perdues.')) return;
-  document.getElementById('welcome-screen').style.display = 'flex';
-  document.getElementById('app').style.display = 'none';
-  state = { company:'', sector:'', customSector:'', employees:[], settings:{open:'08:00',close:'18:00',split:false,minStaff:2,closedDays:[0]}, planning:{}, constraints:[], defaultSchedules:[], currentDate:new Date(), apiKey:'', chatHistory:[] };
-  selectedSector = '';
-  document.querySelectorAll('.sector-btn').forEach(b=>b.classList.remove('active'));
+  if (!confirm('Retourner à l\'écran d\'accueil ? Toutes les données seront effacées.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
 }
 
 // =====================================================
@@ -1668,6 +1666,7 @@ function renderAll() {
   renderConstraints();
   renderSettings();
   updateMonthLabel();
+  saveToStorage();
 }
 
 // =====================================================
@@ -1691,22 +1690,6 @@ function loadFromStorage() {
     Object.assign(state, saved);
     return true;
   } catch(e) { return false; }
-}
-
-// Patch renderAll pour sauvegarder à chaque rendu
-const _renderAll = renderAll;
-function renderAll() { _renderAll(); saveToStorage(); }
-
-// Patch startApp pour sauvegarder après démarrage
-const _startApp = startApp;
-function startApp() { _startApp(); saveToStorage(); }
-
-// Patch resetApp pour effacer le localStorage
-const _resetApp = resetApp;
-function resetApp() {
-  if (!confirm('Retourner à l\'écran d\'accueil ? Toutes les données seront effacées.')) return;
-  localStorage.removeItem(STORAGE_KEY);
-  location.reload();
 }
 
 // Charger au démarrage
