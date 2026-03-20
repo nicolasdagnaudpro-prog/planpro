@@ -1670,10 +1670,62 @@ function renderAll() {
   updateMonthLabel();
 }
 
-// Check API key on load
+// =====================================================
+// LOCALSTORAGE — SAUVEGARDE AUTOMATIQUE
+// =====================================================
+const STORAGE_KEY = 'planpro_data';
+
+function saveToStorage() {
+  try {
+    const toSave = { ...state, currentDate: state.currentDate.toISOString() };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
+  } catch(e) {}
+}
+
+function loadFromStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    const saved = JSON.parse(raw);
+    saved.currentDate = new Date(saved.currentDate);
+    Object.assign(state, saved);
+    return true;
+  } catch(e) { return false; }
+}
+
+// Patch renderAll pour sauvegarder à chaque rendu
+const _renderAll = renderAll;
+function renderAll() { _renderAll(); saveToStorage(); }
+
+// Patch startApp pour sauvegarder après démarrage
+const _startApp = startApp;
+function startApp() { _startApp(); saveToStorage(); }
+
+// Patch resetApp pour effacer le localStorage
+const _resetApp = resetApp;
+function resetApp() {
+  if (!confirm('Retourner à l\'écran d\'accueil ? Toutes les données seront effacées.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+
+// Charger au démarrage
 document.addEventListener('DOMContentLoaded', () => {
-  if (state.apiKey) {
-    document.getElementById('api-key-section').style.display = 'none';
+  if (loadFromStorage() && state.company && state.sector) {
+    document.getElementById('welcome-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    updateSidebarInfo();
+    updateMonthLabel();
+    renderAll();
+    if (state.apiKey) document.getElementById('api-key-section').style.display = 'none';
+    // Afficher notification de restauration
+    setTimeout(() => {
+      const notif = document.createElement('div');
+      notif.style.cssText = 'position:fixed;bottom:1.5rem;right:1.5rem;background:#1a1a1a;color:white;padding:0.75rem 1.25rem;border-radius:10px;font-size:0.85rem;z-index:9999;animation:fadeUp 0.3s ease;box-shadow:0 4px 16px rgba(0,0,0,0.2)';
+      notif.textContent = '✅ Données restaurées automatiquement';
+      document.body.appendChild(notif);
+      setTimeout(() => notif.remove(), 3000);
+    }, 500);
   }
 });
 </script>
