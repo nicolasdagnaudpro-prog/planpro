@@ -42,129 +42,216 @@ input, select, textarea { font-family: inherit; outline: none; }
 
 /* ===== WELCOME SCREEN ===== */
 #welcome-screen {
-  min-height: 100vh; display: flex; align-items: stretch;
+  min-height: 100vh; display: flex; align-items: stretch; position: relative;
+  background: #0a0f1e;
 }
+
+/* ANIMATED BACKGROUND */
+.welcome-bg {
+  position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+}
+.welcome-bg-blob {
+  position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.18;
+}
+.welcome-bg-blob:nth-child(1) {
+  width: 600px; height: 600px; background: #2563EB;
+  top: -150px; right: 10%; animation: blobMove1 12s ease-in-out infinite;
+}
+.welcome-bg-blob:nth-child(2) {
+  width: 500px; height: 500px; background: #7C3AED;
+  bottom: -100px; right: 25%; animation: blobMove2 15s ease-in-out infinite;
+}
+.welcome-bg-blob:nth-child(3) {
+  width: 300px; height: 300px; background: #0EA5E9;
+  top: 40%; right: 5%; animation: blobMove3 10s ease-in-out infinite;
+}
+.welcome-grid-bg {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+@keyframes blobMove1 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(-40px,30px) scale(1.1)} 66%{transform:translate(20px,-20px) scale(0.95)} }
+@keyframes blobMove2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(30px,-40px) scale(1.08)} }
+@keyframes blobMove3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-20px,30px)} }
 
 /* LEFT — FORM */
 .welcome-left {
-  width: 480px; min-width: 380px; background: white;
+  width: 500px; min-width: 400px; position: relative; z-index: 10;
   display: flex; flex-direction: column; justify-content: center;
-  padding: 3rem 3rem; overflow-y: auto; z-index: 2;
-  box-shadow: 4px 0 40px rgba(0,0,0,0.08);
+  padding: 3rem 3.5rem; overflow-y: auto; background: white;
 }
-.welcome-logo { font-family: 'Outfit', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--blue); margin-bottom: 0.15rem; display:flex;align-items:center;gap:0.5rem; }
-.welcome-tagline { color: var(--text-muted); font-size: 0.82rem; margin-bottom: 2rem; }
-.welcome-left h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 0.4rem; color: var(--text); line-height:1.2; }
-.welcome-left > p { color: var(--text-muted); margin-bottom: 1.75rem; font-size: 0.875rem; line-height: 1.6; }
-.form-group { text-align: left; margin-bottom: 1.1rem; }
-.form-group label { display: block; font-weight: 600; font-size: 0.75rem; margin-bottom: 0.45rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.07em; }
+.welcome-logo {
+  font-family: 'Outfit', sans-serif; font-size: 1.4rem; font-weight: 800;
+  color: var(--blue); margin-bottom: 2.5rem; display: flex; align-items: center; gap: 0.5rem;
+}
+.welcome-logo-dot { width: 8px; height: 8px; background: var(--blue); border-radius: 50%; display: inline-block; }
+.welcome-eyebrow {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: var(--blue-light); color: var(--blue); font-size: 0.72rem; font-weight: 700;
+  padding: 0.3rem 0.75rem; border-radius: 20px; margin-bottom: 1rem;
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.welcome-left h2 {
+  font-size: 2rem; font-weight: 800; line-height: 1.15; margin-bottom: 0.75rem; color: #0a0f1e;
+}
+.welcome-left h2 span { color: var(--blue); }
+.welcome-left > p { color: var(--text-muted); margin-bottom: 2rem; font-size: 0.875rem; line-height: 1.7; }
+.form-group { text-align: left; margin-bottom: 1rem; }
+.form-group label {
+  display: block; font-weight: 600; font-size: 0.72rem; margin-bottom: 0.4rem;
+  color: #374151; text-transform: uppercase; letter-spacing: 0.07em;
+}
 .form-group input, .form-group select {
-  width: 100%; padding: 0.75rem 1rem; border: 1.5px solid var(--border);
-  border-radius: var(--radius-sm); font-size: 0.95rem; background: var(--bg-soft);
+  width: 100%; padding: 0.8rem 1rem; border: 1.5px solid var(--border);
+  border-radius: 10px; font-size: 0.95rem; background: white; color: var(--text);
   transition: border-color 0.2s, box-shadow 0.2s;
 }
-.form-group input:focus, .form-group select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); background: white; }
-.sector-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; margin-bottom: 1.75rem; }
+.form-group input:focus, .form-group select:focus {
+  border-color: var(--blue); box-shadow: 0 0 0 4px rgba(37,99,235,0.08); outline: none;
+}
+.form-group input::placeholder { color: #9CA3AF; }
+.sector-section-label {
+  font-size: 0.72rem; font-weight: 700; color: #374151; text-transform: uppercase;
+  letter-spacing: 0.07em; margin-bottom: 0.6rem; margin-top: 0.25rem;
+}
+.sector-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-bottom: 1.75rem;
+}
 .sector-btn {
-  padding: 0.65rem 0.4rem; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-  background: white; font-size: 0.72rem; font-weight: 500; color: var(--text-muted);
-  transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
-  cursor: pointer; line-height: 1.3;
+  padding: 0.6rem 0.25rem; border: 1.5px solid #F3F4F6; border-radius: 10px;
+  background: #FAFAFA; font-size: 0.68rem; font-weight: 500; color: #6B7280;
+  transition: all 0.18s cubic-bezier(0.4,0,0.2,1);
+  display: flex; flex-direction: column; align-items: center; gap: 0.25rem;
+  cursor: pointer; line-height: 1.3; text-align: center;
 }
-.sector-btn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-light); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37,99,235,0.15); }
-.sector-btn.active { border-color: var(--blue); color: var(--blue); background: var(--blue-light); font-weight: 700; box-shadow: 0 4px 12px rgba(37,99,235,0.2); }
-.sector-btn .sector-icon { font-size: 1.5rem; }
+.sector-btn:hover {
+  border-color: #BFDBFE; color: var(--blue); background: var(--blue-light);
+  transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37,99,235,0.12);
+}
+.sector-btn.active {
+  border-color: var(--blue); color: var(--blue); background: var(--blue-light);
+  font-weight: 700; box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+  transform: translateY(-1px);
+}
+.sector-btn .sector-icon { font-size: 1.25rem; }
 .btn-primary {
-  background: linear-gradient(135deg, #2563EB, #7C3AED); color: white; padding: 0.9rem 2rem;
-  border-radius: var(--radius-sm); font-size: 0.95rem; font-weight: 700; width: 100%;
-  transition: all 0.25s; box-shadow: 0 4px 20px rgba(37,99,235,0.4); letter-spacing: 0.01em;
+  background: #0a0f1e; color: white; padding: 0.9rem 2rem;
+  border-radius: 10px; font-size: 0.9rem; font-weight: 700; width: 100%;
+  transition: all 0.2s; letter-spacing: 0.01em; position: relative; overflow: hidden;
 }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,99,235,0.45); }
+.btn-primary::after {
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(135deg, rgba(37,99,235,0.4), rgba(124,58,237,0.4));
+  opacity: 0; transition: opacity 0.2s;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,15,30,0.35); }
+.btn-primary:hover::after { opacity: 1; }
 .btn-primary:active { transform: translateY(0); }
-.welcome-trust { display:flex; align-items:center; gap:0.75rem; margin-top:1.25rem; }
-.welcome-trust-avatars { display:flex; }
-.welcome-trust-avatars span { width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#2563EB,#7C3AED);border:2px solid white;display:inline-flex;align-items:center;justify-content:center;font-size:0.65rem;color:white;font-weight:700;margin-left:-8px; }
-.welcome-trust-avatars span:first-child { margin-left:0; }
-.welcome-trust-text { font-size:0.75rem;color:var(--text-muted);line-height:1.4; }
-.welcome-trust-text strong { color:var(--text); }
+.btn-primary span { position: relative; z-index: 1; }
+.welcome-divider {
+  display: flex; align-items: center; gap: 0.75rem; margin: 1.25rem 0 1rem;
+}
+.welcome-divider::before, .welcome-divider::after {
+  content:''; flex:1; height:1px; background: var(--border);
+}
+.welcome-divider span { font-size: 0.72rem; color: var(--text-muted); white-space: nowrap; }
+.welcome-features {
+  display: flex; gap: 1rem; flex-wrap: wrap;
+}
+.welcome-feature {
+  display: flex; align-items: center; gap: 0.35rem;
+  font-size: 0.75rem; color: var(--text-muted);
+}
+.welcome-feature-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
 
 /* RIGHT — SHOWCASE */
 .welcome-right {
-  flex: 1; position: relative; overflow: hidden;
-  background: linear-gradient(160deg, #0f172a 0%, #1e3a8a 50%, #312e81 100%);
+  flex: 1; position: relative; z-index: 1;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-}
-.welcome-right::before {
-  content:''; position:absolute; inset:0;
-  background: radial-gradient(ellipse at 30% 20%, rgba(37,99,235,0.3) 0%, transparent 60%),
-              radial-gradient(ellipse at 80% 80%, rgba(124,58,237,0.25) 0%, transparent 55%);
-}
-.showcase-title {
-  position:relative; z-index:2; text-align:center; color:white;
-  padding: 0 2rem; margin-bottom: 2.5rem;
-}
-.showcase-title h3 { font-family:'Outfit',sans-serif; font-size:2rem; font-weight:800; line-height:1.2; margin-bottom:0.5rem; }
-.showcase-title p { font-size:0.9rem; opacity:0.7; }
-.showcase-title .highlight { color:#93C5FD; }
-
-/* FLOATING SECTOR CARDS */
-.sectors-showcase { position:relative; z-index:2; width:100%; max-width:520px; padding:0 2rem; }
-.sector-photo-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:0.75rem; }
-.sector-photo-card {
-  border-radius:16px; overflow:hidden; position:relative; cursor:default;
-  aspect-ratio:1; box-shadow:0 8px 32px rgba(0,0,0,0.4);
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-  animation: floatCard 6s ease-in-out infinite;
-}
-.sector-photo-card:nth-child(1) { animation-delay:0s; }
-.sector-photo-card:nth-child(2) { animation-delay:0.5s; }
-.sector-photo-card:nth-child(3) { animation-delay:1s; }
-.sector-photo-card:nth-child(4) { animation-delay:1.5s; }
-.sector-photo-card:nth-child(5) { animation-delay:2s; }
-.sector-photo-card:nth-child(6) { animation-delay:2.5s; }
-.sector-photo-card:hover { transform:translateY(-6px) scale(1.04) !important; box-shadow:0 20px 50px rgba(0,0,0,0.5); z-index:10; animation-play-state:paused; }
-.sector-photo-card img { width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.4s; }
-.sector-photo-card:hover img { transform:scale(1.08); }
-.sector-photo-overlay {
-  position:absolute;inset:0;
-  background:linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%);
-  display:flex; align-items:flex-end; padding:0.6rem;
-}
-.sector-photo-label { color:white;font-size:0.65rem;font-weight:700;line-height:1.2; }
-.sector-photo-icon { font-size:1rem;display:block;margin-bottom:0.1rem; }
-
-/* FLOATING STATS */
-.showcase-stats { position:relative; z-index:2; display:flex; gap:1rem; margin-top:1.75rem; justify-content:center; flex-wrap:wrap; }
-.showcase-stat {
-  background:rgba(255,255,255,0.1); backdrop-filter:blur(12px);
-  border:1px solid rgba(255,255,255,0.15); border-radius:12px;
-  padding:0.75rem 1.25rem; text-align:center; color:white;
-  animation: floatCard 5s ease-in-out infinite;
-}
-.showcase-stat:nth-child(2) { animation-delay:1s; }
-.showcase-stat:nth-child(3) { animation-delay:2s; }
-.showcase-stat-value { font-family:'Outfit',sans-serif; font-size:1.5rem; font-weight:800; color:#93C5FD; }
-.showcase-stat-label { font-size:0.7rem; opacity:0.75; margin-top:0.1rem; }
-
-/* GRID DOTS BG */
-.welcome-right::after {
-  content:''; position:absolute; inset:0; z-index:1;
-  background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
-  background-size: 28px 28px;
+  padding: 3rem 2rem; overflow: hidden;
 }
 
-@keyframes floatCard {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-6px); }
+/* APP MOCKUP */
+.app-mockup {
+  width: 100%; max-width: 560px; position: relative;
+  animation: mockupFloat 6s ease-in-out infinite;
 }
-@keyframes shimmer {
-  0% { opacity:0.7; } 50% { opacity:1; } 100% { opacity:0.7; }
+@keyframes mockupFloat {
+  0%,100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-12px) rotate(-1deg); }
 }
+.mockup-window {
+  background: white; border-radius: 16px;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08);
+  overflow: hidden;
+}
+.mockup-topbar {
+  background: white; padding: 0.6rem 1rem; border-bottom: 1px solid #F3F4F6;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.mockup-dot { width: 10px; height: 10px; border-radius: 50%; }
+.mockup-url { flex: 1; background: #F9FAFB; border-radius: 6px; padding: 0.25rem 0.75rem; font-size: 0.65rem; color: #9CA3AF; margin: 0 0.5rem; }
+.mockup-body { display: flex; height: 320px; }
+.mockup-sidebar { width: 44px; background: white; border-right: 1px solid #F3F4F6; padding: 0.75rem 0; display: flex; flex-direction: column; align-items: center; gap: 0.6rem; }
+.mockup-nav-item { width: 28px; height: 28px; border-radius: 7px; background: #F3F4F6; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; transition: all 0.2s; }
+.mockup-nav-item.active { background: var(--blue-light); }
+.mockup-content { flex: 1; padding: 0.75rem; background: #F9FAFB; overflow: hidden; }
+.mockup-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; }
+.mockup-title { font-size: 0.7rem; font-weight: 700; color: #1a1a1a; }
+.mockup-badge { font-size: 0.55rem; padding: 0.15rem 0.4rem; background: var(--blue-light); color: var(--blue); border-radius: 4px; font-weight: 600; }
+.mockup-table { width: 100%; border-collapse: collapse; }
+.mockup-table th { font-size: 0.55rem; color: #9CA3AF; font-weight: 600; padding: 0.25rem 0.3rem; text-align: center; background: white; border-bottom: 1px solid #F3F4F6; }
+.mockup-table th:first-child { text-align: left; min-width: 60px; }
+.mockup-table td { padding: 0.2rem 0.25rem; font-size: 0.55rem; border-bottom: 1px solid #F9FAFB; }
+.mockup-table td:first-child { font-weight: 600; color: #374151; }
+.mockup-cell { width: 18px; height: 18px; border-radius: 3px; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-size: 0.45rem; font-weight: 700; }
+.mc-w { background: #DCFCE7; color: #16A34A; }
+.mc-r { background: #FEE2E2; color: #DC2626; }
+.mc-v { background: #FFF7ED; color: #EA580C; }
+.mc-t { background: #EDE9FE; color: #7C3AED; }
+.mc-c { background: #F3F4F6; color: #9CA3AF; }
+.mockup-emp { display: flex; align-items: center; gap: 0.3rem; }
+.mockup-avatar { width: 16px; height: 16px; border-radius: 50%; color: white; font-size: 0.45rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.mockup-hours-bar { height: 3px; border-radius: 2px; background: #E5E7EB; margin-top: 2px; overflow: hidden; }
+.mockup-hours-fill { height: 100%; border-radius: 2px; background: var(--blue); }
+
+/* FLOATING FEATURE PILLS */
+.feature-pill {
+  position: absolute; background: white; border-radius: 12px;
+  padding: 0.6rem 0.9rem; box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.72rem; font-weight: 600; color: #1a1a1a; white-space: nowrap;
+  border: 1px solid rgba(255,255,255,0.8);
+  animation: pillFloat 5s ease-in-out infinite;
+}
+.feature-pill:nth-child(2) { animation-delay: 1.5s; }
+.feature-pill:nth-child(3) { animation-delay: 3s; }
+.pill-1 { top: 8%; left: -5%; }
+.pill-2 { bottom: 20%; left: -8%; }
+.pill-3 { top: 55%; right: -5%; }
+.pill-icon { font-size: 1rem; }
+.pill-sub { font-size: 0.62rem; font-weight: 400; color: var(--text-muted); }
+@keyframes pillFloat {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* SHOWCASE BOTTOM TAGS */
+.showcase-tags { display: flex; gap: 0.6rem; margin-top: 2rem; flex-wrap: wrap; justify-content: center; }
+.showcase-tag {
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.6); font-size: 0.72rem; font-weight: 500;
+  padding: 0.35rem 0.75rem; border-radius: 20px; backdrop-filter: blur(8px);
+  transition: all 0.2s;
+}
+.showcase-tag:hover { background: rgba(255,255,255,0.12); color: white; }
 
 /* RESPONSIVE WELCOME */
-@media (max-width: 900px) {
-  .welcome-right { display:none; }
-  .welcome-left { width:100%; min-width:unset; box-shadow:none; padding:2rem 1.5rem; }
+@media (max-width: 960px) {
+  .welcome-right { display: none; }
+  .welcome-left { width: 100%; min-width: unset; padding: 2rem 1.5rem; }
+  .sector-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
 /* ===== MAIN APP ===== */
@@ -458,104 +545,151 @@ textarea.form-control:focus { border-color: var(--blue); box-shadow: 0 0 0 3px r
 <!-- ===== WELCOME SCREEN ===== -->
 <div id="welcome-screen">
 
+  <!-- BACKGROUND ANIMÉ -->
+  <div class="welcome-bg">
+    <div class="welcome-grid-bg"></div>
+    <div class="welcome-bg-blob"></div>
+    <div class="welcome-bg-blob"></div>
+    <div class="welcome-bg-blob"></div>
+  </div>
+
   <!-- GAUCHE : FORMULAIRE -->
   <div class="welcome-left">
-    <div class="welcome-logo">📋 PlanPro</div>
-    <div class="welcome-tagline">Planning d'équipe intelligent pour TPE/PME</div>
+    <div class="welcome-logo">
+      <div class="welcome-logo-dot"></div> PlanPro
+    </div>
 
-    <h2>Gérez votre équipe<br><span style="color:var(--blue)">simplement.</span></h2>
-    <p>Sélectionnez votre secteur et entrez le nom de votre établissement pour charger les paramètres adaptés.</p>
+    <div class="welcome-eyebrow">✦ Nouveau — Agent IA intégré</div>
+    <h2>Le planning<br>qui <span>pense</span> pour vous.</h2>
+    <p>Configurez votre équipe en 30 secondes. Générez des plannings optimisés en langage naturel grâce à l'IA.</p>
 
     <div class="form-group">
       <label>Nom de l'entreprise</label>
-      <input type="text" id="company-name-input" placeholder="Ex : Boulangerie Dupont" />
+      <input type="text" id="company-name-input" placeholder="Ex : Boulangerie Martin" />
     </div>
 
-    <div class="form-group">
-      <label>Votre secteur d'activité</label>
-      <div class="sector-grid" id="sector-grid">
-        <button class="sector-btn" data-sector="boulangerie" onclick="selectSector(this)"><span class="sector-icon">🥐</span>Boulangerie</button>
-        <button class="sector-btn" data-sector="restaurant" onclick="selectSector(this)"><span class="sector-icon">🍽️</span>Restaurant</button>
-        <button class="sector-btn" data-sector="garage" onclick="selectSector(this)"><span class="sector-icon">🔧</span>Garage</button>
-        <button class="sector-btn" data-sector="coiffure" onclick="selectSector(this)"><span class="sector-icon">✂️</span>Coiffure</button>
-        <button class="sector-btn" data-sector="plomberie" onclick="selectSector(this)"><span class="sector-icon">🔩</span>Plomberie</button>
-        <button class="sector-btn" data-sector="btp" onclick="selectSector(this)"><span class="sector-icon">🏗️</span>BTP</button>
-        <button class="sector-btn" data-sector="kine" onclick="selectSector(this)"><span class="sector-icon">🏥</span>Santé</button>
-        <button class="sector-btn" data-sector="commerce" onclick="selectSector(this)"><span class="sector-icon">🛒</span>Commerce</button>
-        <button class="sector-btn" data-sector="supermarche" onclick="selectSector(this)"><span class="sector-icon">🏪</span>Supermarché</button>
-        <button class="sector-btn" data-sector="pressing" onclick="selectSector(this)"><span class="sector-icon">👕</span>Pressing</button>
-        <button class="sector-btn" data-sector="pharmacie" onclick="selectSector(this)"><span class="sector-icon">💊</span>Pharmacie</button>
-        <button class="sector-btn" data-sector="autre" onclick="selectSector(this)"><span class="sector-icon">⚙️</span>Autre</button>
-      </div>
+    <div class="sector-section-label">Votre secteur</div>
+    <div class="sector-grid" id="sector-grid">
+      <button class="sector-btn" data-sector="boulangerie" onclick="selectSector(this)"><span class="sector-icon">🥐</span>Boulangerie</button>
+      <button class="sector-btn" data-sector="restaurant" onclick="selectSector(this)"><span class="sector-icon">🍽️</span>Restaurant</button>
+      <button class="sector-btn" data-sector="garage" onclick="selectSector(this)"><span class="sector-icon">🔧</span>Garage</button>
+      <button class="sector-btn" data-sector="coiffure" onclick="selectSector(this)"><span class="sector-icon">✂️</span>Coiffure</button>
+      <button class="sector-btn" data-sector="plomberie" onclick="selectSector(this)"><span class="sector-icon">🔩</span>Plomberie</button>
+      <button class="sector-btn" data-sector="btp" onclick="selectSector(this)"><span class="sector-icon">🏗️</span>BTP</button>
+      <button class="sector-btn" data-sector="kine" onclick="selectSector(this)"><span class="sector-icon">🏥</span>Santé</button>
+      <button class="sector-btn" data-sector="commerce" onclick="selectSector(this)"><span class="sector-icon">🛒</span>Commerce</button>
+      <button class="sector-btn" data-sector="supermarche" onclick="selectSector(this)"><span class="sector-icon">🏪</span>Supermarché</button>
+      <button class="sector-btn" data-sector="pressing" onclick="selectSector(this)"><span class="sector-icon">👕</span>Pressing</button>
+      <button class="sector-btn" data-sector="pharmacie" onclick="selectSector(this)"><span class="sector-icon">💊</span>Pharmacie</button>
+      <button class="sector-btn" data-sector="autre" onclick="selectSector(this)"><span class="sector-icon">⚙️</span>Autre</button>
     </div>
 
     <div class="form-group" id="custom-sector-group" style="display:none">
-      <label>Nom du secteur personnalisé</label>
-      <input type="text" id="custom-sector-input" placeholder="Ex : Fleuriste, Pharmacie…" />
+      <label>Nom du secteur</label>
+      <input type="text" id="custom-sector-input" placeholder="Ex : Fleuriste…" />
     </div>
 
-    <button class="btn-primary" onclick="startApp()">Créer mon espace planning →</button>
+    <button class="btn-primary" onclick="startApp()">
+      <span>Créer mon espace planning →</span>
+    </button>
 
-    <div class="welcome-trust">
-      <div class="welcome-trust-avatars">
-        <span>TM</span><span>SB</span><span>JL</span><span>+</span>
-      </div>
-      <div class="welcome-trust-text">
-        <strong>Gratuit & sans compte</strong><br>
-        Vos données restent sur votre appareil
-      </div>
+    <div class="welcome-divider"><span>Inclus gratuitement</span></div>
+    <div class="welcome-features">
+      <div class="welcome-feature"><span class="welcome-feature-dot"></span>Export Excel</div>
+      <div class="welcome-feature"><span class="welcome-feature-dot"></span>Agent IA</div>
+      <div class="welcome-feature"><span class="welcome-feature-dot"></span>Sans compte</div>
+      <div class="welcome-feature"><span class="welcome-feature-dot"></span>100% local</div>
     </div>
   </div>
 
-  <!-- DROITE : SHOWCASE ANIMÉ -->
+  <!-- DROITE : MOCKUP APP -->
   <div class="welcome-right">
-    <div class="showcase-title">
-      <h3>Planifiez en<br><span class="highlight">toute sérénité</span></h3>
-      <p>Pour tous les métiers, toutes les équipes</p>
+    <div class="app-mockup">
+
+      <!-- PILLS FLOTTANTES -->
+      <div class="feature-pill pill-1">
+        <span class="pill-icon">🤖</span>
+        <div><div>IA a généré le planning</div><div class="pill-sub">il y a 2 secondes</div></div>
+      </div>
+      <div class="feature-pill pill-2">
+        <span class="pill-icon">⚠️</span>
+        <div><div>Sous-effectif détecté</div><div class="pill-sub">Mercredi 12 mars</div></div>
+      </div>
+      <div class="feature-pill pill-3">
+        <span class="pill-icon">✅</span>
+        <div><div>Planning exporté</div><div class="pill-sub">Mars_2026.xlsx</div></div>
+      </div>
+
+      <!-- FENÊTRE APP -->
+      <div class="mockup-window">
+        <div class="mockup-topbar">
+          <div class="mockup-dot" style="background:#FF5F57"></div>
+          <div class="mockup-dot" style="background:#FFBD2E"></div>
+          <div class="mockup-dot" style="background:#28C840"></div>
+          <div class="mockup-url">planpro.app / planning / mars-2026</div>
+        </div>
+        <div class="mockup-body">
+          <div class="mockup-sidebar">
+            <div class="mockup-nav-item">📊</div>
+            <div class="mockup-nav-item active">📅</div>
+            <div class="mockup-nav-item">🤖</div>
+            <div class="mockup-nav-item">👥</div>
+            <div class="mockup-nav-item">⚙️</div>
+          </div>
+          <div class="mockup-content">
+            <div class="mockup-header">
+              <div class="mockup-title">Planning — Mars 2026</div>
+              <div class="mockup-badge">4 employés</div>
+            </div>
+            <table class="mockup-table">
+              <thead>
+                <tr>
+                  <th>Employé</th>
+                  <th>Lu 3</th><th>Ma 4</th><th>Me 5</th><th>Je 6</th><th>Ve 7</th><th>Sa 8</th><th>Di 9</th>
+                  <th>Lu 10</th><th>Ma 11</th><th>Me 12</th><th>Je 13</th><th>Ve 14</th>
+                  <th>Heures</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="mockup-emp"><div class="mockup-avatar" style="background:#2563EB">TM</div><div>Thomas<div class="mockup-hours-bar"><div class="mockup-hours-fill" style="width:72%"></div></div></div></div></td>
+                  <td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-r">R</div></td><td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-c">-</div></td>
+                  <td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-v">V</div></td><td><div class="mockup-cell mc-v">V</div></td><td><div class="mockup-cell mc-v">V</div></td><td><div class="mockup-cell mc-w">W</div></td>
+                  <td style="font-size:0.6rem;font-weight:700;color:#16A34A">121h</td>
+                </tr>
+                <tr>
+                  <td><div class="mockup-emp"><div class="mockup-avatar" style="background:#16A34A">JL</div><div>Julie<div class="mockup-hours-bar"><div class="mockup-hours-fill" style="width:88%"></div></div></div></div></td>
+                  <td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-r">R</div></td><td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-c">-</div></td>
+                  <td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-t">F</div></td><td><div class="mockup-cell mc-t">F</div></td><td><div class="mockup-cell mc-w">W</div></td>
+                  <td style="font-size:0.6rem;font-weight:700;color:#16A34A">148h</td>
+                </tr>
+                <tr>
+                  <td><div class="mockup-emp"><div class="mockup-avatar" style="background:#EA580C">PM</div><div>Pierre<div class="mockup-hours-bar"><div class="mockup-hours-fill" style="width:55%;background:#EA580C"></div></div></div></div></td>
+                  <td><div class="mockup-cell mc-r">R</div></td><td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-r">R</div></td><td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-c">-</div></td>
+                  <td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-r">R</div></td><td><div class="mockup-cell mc-w">W</div></td>
+                  <td style="font-size:0.6rem;font-weight:700;color:#EA580C">93h</td>
+                </tr>
+                <tr>
+                  <td><div class="mockup-emp"><div class="mockup-avatar" style="background:#7C3AED">SB</div><div>Sophie<div class="mockup-hours-bar"><div class="mockup-hours-fill" style="width:95%"></div></div></div></div></td>
+                  <td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-r">R</div></td><td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-c">-</div></td>
+                  <td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-w">W</div></td><td><div class="mockup-cell mc-r">R</div></td>
+                  <td style="font-size:0.6rem;font-weight:700;color:#16A34A">160h</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="sectors-showcase">
-      <div class="sector-photo-grid">
-        <div class="sector-photo-card">
-          <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&q=80&fit=crop" alt="Boulangerie" loading="lazy">
-          <div class="sector-photo-overlay"><div class="sector-photo-label"><span class="sector-photo-icon">🥐</span>Boulangerie</div></div>
-        </div>
-        <div class="sector-photo-card">
-          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=300&q=80&fit=crop" alt="Restaurant" loading="lazy">
-          <div class="sector-photo-overlay"><div class="sector-photo-label"><span class="sector-photo-icon">🍽️</span>Restaurant</div></div>
-        </div>
-        <div class="sector-photo-card">
-          <img src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=300&q=80&fit=crop" alt="Garage" loading="lazy">
-          <div class="sector-photo-overlay"><div class="sector-photo-label"><span class="sector-photo-icon">🔧</span>Garage</div></div>
-        </div>
-        <div class="sector-photo-card">
-          <img src="https://images.unsplash.com/photo-1560066984-138daaa0e1bd?w=300&q=80&fit=crop" alt="Coiffure" loading="lazy">
-          <div class="sector-photo-overlay"><div class="sector-photo-label"><span class="sector-photo-icon">✂️</span>Coiffure</div></div>
-        </div>
-        <div class="sector-photo-card">
-          <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=300&q=80&fit=crop" alt="BTP" loading="lazy">
-          <div class="sector-photo-overlay"><div class="sector-photo-label"><span class="sector-photo-icon">🏗️</span>BTP</div></div>
-        </div>
-        <div class="sector-photo-card">
-          <img src="https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=300&q=80&fit=crop" alt="Pharmacie" loading="lazy">
-          <div class="sector-photo-overlay"><div class="sector-photo-label"><span class="sector-photo-icon">💊</span>Pharmacie</div></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="showcase-stats">
-      <div class="showcase-stat">
-        <div class="showcase-stat-value">12</div>
-        <div class="showcase-stat-label">Secteurs</div>
-      </div>
-      <div class="showcase-stat">
-        <div class="showcase-stat-value">100%</div>
-        <div class="showcase-stat-label">Gratuit</div>
-      </div>
-      <div class="showcase-stat">
-        <div class="showcase-stat-value">IA</div>
-        <div class="showcase-stat-label">Intégrée</div>
-      </div>
+    <div class="showcase-tags">
+      <span class="showcase-tag">🥐 Boulangerie</span>
+      <span class="showcase-tag">🍽️ Restaurant</span>
+      <span class="showcase-tag">🔧 Garage</span>
+      <span class="showcase-tag">✂️ Coiffure</span>
+      <span class="showcase-tag">🏗️ BTP</span>
+      <span class="showcase-tag">💊 Pharmacie</span>
+      <span class="showcase-tag">+ 6 autres</span>
     </div>
   </div>
 
